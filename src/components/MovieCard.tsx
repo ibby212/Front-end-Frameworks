@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { Movie } from "../types";
 import { getPosterUrl } from "../data/sampleMovies";
 import { getGenreNames } from "../data/genres";
@@ -7,6 +8,8 @@ type MovieCardProps = {
 };
 
 const MovieCard = ({ movie }: MovieCardProps) => {
+  const [isFavourite, setIsFavourite] = useState(false);
+
   const year = movie.release_date ? movie.release_date.substring(0, 4) : "TBA";
   const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "N/A";
   const genres = getGenreNames(movie.genre_ids).slice(0, 2);
@@ -32,12 +35,18 @@ const MovieCard = ({ movie }: MovieCardProps) => {
               </svg>
               {rating}
             </span>
-            <button className="favorite-btn" aria-label="Add to Favourites">
+            <button
+              className={`favorite-btn ${isFavourite ? "is-favorite" : ""}`}
+              aria-label={
+                isFavourite ? "Remove from Favourites" : "Add to Favourites"
+              }
+              onClick={() => setIsFavourite(!isFavourite)}
+            >
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
-                fill="none"
+                fill={isFavourite ? "currentColor" : "none"}
                 stroke="currentColor"
                 strokeWidth="2"
               >

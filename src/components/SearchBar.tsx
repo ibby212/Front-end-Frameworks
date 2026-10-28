@@ -1,4 +1,9 @@
-const SearchBar = () => {
+type SearchBarProps = {
+  query: string;
+  onChange: (value: string) => void;
+};
+
+const SearchBar = ({ query, onChange }: SearchBarProps) => {
   return (
     <header className="site-header">
       <div className="header-inner">
@@ -23,9 +28,15 @@ const SearchBar = () => {
               type="text"
               className="search-input"
               placeholder="Search movies, plot keywords, titles..."
+              value={query}
+              onChange={(e) => onChange(e.target.value)}
               autoComplete="off"
             />
-            <button className="search-clear-btn" title="Clear search">
+            <button
+              className="search-clear-btn"
+              title="Clear search"
+              onClick={() => onChange("")}
+            >
               &times;
             </button>
           </div>
