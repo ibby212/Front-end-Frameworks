@@ -1,9 +1,17 @@
+import { SAMPLE_MOVIES } from "./data/sampleMovies";
+import MovieList from "./components/MovieList";
+import SearchBar from "./components/SearchBar";
+
 function App() {
   return (
-    <div>
-      <h1>Movie App</h1>
+    <div className="app-layout">
+      <SearchBar />
+      <main className="main-container">
+        <h1>Movie App</h1>
+        <MovieList movies={SAMPLE_MOVIES} />
+      </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
