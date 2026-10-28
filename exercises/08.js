@@ -20,3 +20,33 @@ const BASE_URL = "https://jsonplaceholder.typicode.com";
 
 // Call getPostById(1) and log the result.
 // Call getPostById(99999) — what happens? Handle it.
+
+async function fetchPosts() {
+  try {
+    const res = await fetch(BASE_URL + "/posts");
+    const data = await res.json();
+    const posts = data.slice(0, 5);
+    posts.forEach((post) => console.log(post.title));
+    return posts;
+  } catch (error) {
+    console.log("Failed to load posts");
+  }
+}
+
+async function getPostById(id) {
+  const res = await fetch(BASE_URL + "/posts/" + id);
+  if (!res.ok) {
+    throw new Error(`Post ${id} not found (status ${res.status})`);
+  }
+  return await res.json();
+}
+
+fetchPosts();
+
+getPostById(1)
+  .then((post) => console.log(post))
+  .catch((error) => console.log(error.message));
+
+getPostById(99999)
+  .then((post) => console.log(post))
+  .catch((error) => console.log(error.message));
