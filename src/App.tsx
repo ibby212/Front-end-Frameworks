@@ -1,32 +1,51 @@
 import { useState } from "react";
-import MovieList from "./components/MovieList";
+import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import SearchBar from "./components/SearchBar";
-import { useMovies } from "./hooks/useMovies";
-import { useGenres } from "./hooks/useGenres";
+import HomePage from "./pages/HomePage";
+import AboutPage from "./pages/AboutPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
-const apiUrl = `${import.meta.env.VITE_TMDB_BASE_URL}/movie/popular?language=en-US&page=1`;
-const genresUrl = `${import.meta.env.VITE_TMDB_BASE_URL}/genre/movie/list?language=en`;
-
-function App() {
-  const [query, setQuery] = useState("");
-  const { movies, loading, error } = useMovies(apiUrl);
-  const { genres } = useGenres(genresUrl);
-
-  const filteredMovies = movies.filter((m) =>
-    m.title.toLowerCase().includes(query.toLowerCase()),
-  );
+const App = () => {
+  const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <div className="app-layout">
-      <SearchBar query={query} onChange={setQuery} />
-      <main className="main-container">
-        <h1>Movie App</h1>
-        {loading && <p>Loading...</p>}
-        {error && <p>Something went wrong.</p>}
-        {!loading && !error && <MovieList movies={filteredMovies} genres={genres} />}
-      </main>
-    </div>
+    <BrowserRouter>
+      <div className="app-layout">
+        <header className="site-header">
+          <div className="header-inner">
+            <div className="header-left">
+              <div className="brand-logo">
+                <div className="logo-dot"></div>
+                <span className="logo-text">CINE&middot;GRID</span>
+              </div>
+              <nav className="header-nav">
+                <NavLink to="/" end>
+                  Home
+                </NavLink>
+                <NavLink to="/about">About</NavLink>
+              </nav>
+            </div>
+
+            <div className="header-search">
+              <SearchBar query={searchQuery} onChange={setSearchQuery} />
+            </div>
+
+            <div className="header-actions">
+              <button className="btn-icon-label">
+                <span>Watchlist</span>
+                <span className="count-badge">0</span>
+              </button>
+            </div>
+          </div>
+        </header>
+        <Routes>
+          <Route path="/" element={<HomePage searchQuery={searchQuery} />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
