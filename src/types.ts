@@ -12,3 +12,8 @@ export interface Movie {
   popularity: number;
   adult: boolean;
 }
+
+export interface Genre {
+  id: number;
+  name: string;
+}

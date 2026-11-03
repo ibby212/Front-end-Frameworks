@@ -1,11 +1,12 @@
-import type { Movie } from "../types";
+import type { Genre, Movie } from "../types";
 import MovieCard from "./MovieCard";
 
 type MovieListProps = {
   movies: Movie[];
+  genres?: Genre[];
 };
 
-const MovieList = ({ movies }: MovieListProps) => {
+const MovieList = ({ movies, genres }: MovieListProps) => {
   if (movies.length === 0) {
     return (
       <div className="empty-state">
@@ -17,7 +18,7 @@ const MovieList = ({ movies }: MovieListProps) => {
   return (
     <div className="movies-grid">
       {movies.map((movie) => (
-        <MovieCard key={movie.id} movie={movie} />
+        <MovieCard key={movie.id} movie={movie} genres={genres} />
       ))}
     </div>
   );

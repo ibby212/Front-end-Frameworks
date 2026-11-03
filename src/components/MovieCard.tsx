@@ -1,18 +1,25 @@
 import { useState } from "react";
-import type { Movie } from "../types";
+import type { Genre, Movie } from "../types";
 import { getPosterUrl } from "../data/sampleMovies";
 import { getGenreNames } from "../data/genres";
 
 type MovieCardProps = {
   movie: Movie;
+  genres?: Genre[];
 };
 
-const MovieCard = ({ movie }: MovieCardProps) => {
+const MovieCard = ({ movie, genres = [] }: MovieCardProps) => {
   const [isFavourite, setIsFavourite] = useState(false);
 
   const year = movie.release_date ? movie.release_date.substring(0, 4) : "TBA";
   const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "N/A";
-  const genres = getGenreNames(movie.genre_ids).slice(0, 2);
+  const genreNames = (
+    genres.length
+      ? movie.genre_ids.map(
+          (id) => genres.find((g) => g.id === id)?.name ?? "Other",
+        )
+      : getGenreNames(movie.genre_ids)
+  ).slice(0, 2);
 
   return (
     <article
@@ -68,7 +75,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
           </span>
         </div>
         <div className="movie-genres-tags">
-          {genres.map((genre) => (
+          {genreNames.map((genre) => (
             <span key={genre} className="genre-tag">
               {genre}
             </span>
