@@ -1,30 +1,13 @@
-import { useEffect, useState } from "react";
-import { SAMPLE_MOVIES } from "./data/sampleMovies";
+import { useState } from "react";
 import MovieList from "./components/MovieList";
 import SearchBar from "./components/SearchBar";
-import type { Movie } from "./types";
+import { useMovies } from "./hooks/useMovies";
+
+const apiUrl = `${import.meta.env.VITE_TMDB_BASE_URL}/movie/popular?language=en-US&page=1`;
 
 function App() {
   const [query, setQuery] = useState("");
-  const [movies, setMovies] = useState<Movie[]>(SAMPLE_MOVIES);
-
-  useEffect(() => {
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${import.meta.env.VITE_TMDB_API_KEY}`,
-      },
-    };
-
-    fetch(
-      "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
-      options,
-    )
-      .then((res) => res.json())
-      .then((res) => setMovies(res.results))
-      .catch((err) => console.error(err));
-  }, []);
+  const { movies, loading, error } = useMovies(apiUrl);
 
   const filteredMovies = movies.filter((m) =>
     m.title.toLowerCase().includes(query.toLowerCase()),
@@ -35,7 +18,9 @@ function App() {
       <SearchBar query={query} onChange={setQuery} />
       <main className="main-container">
         <h1>Movie App</h1>
-        <MovieList movies={filteredMovies} />
+        {loading && <p>Loading...</p>}
+        {error && <p>Something went wrong.</p>}
+        {!loading && !error && <MovieList movies={filteredMovies} />}
       </main>
     </div>
   );
