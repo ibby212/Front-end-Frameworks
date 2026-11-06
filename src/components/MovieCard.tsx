@@ -6,9 +6,10 @@ import { getGenreNames } from "../data/genres";
 type MovieCardProps = {
   movie: Movie;
   genres?: Genre[];
+  onMovieClick?: (movie: Movie) => void;
 };
 
-const MovieCard = ({ movie, genres = [] }: MovieCardProps) => {
+const MovieCard = ({ movie, genres = [], onMovieClick }: MovieCardProps) => {
   const [isFavourite, setIsFavourite] = useState(false);
 
   const year = movie.release_date ? movie.release_date.substring(0, 4) : "TBA";
@@ -61,7 +62,14 @@ const MovieCard = ({ movie, genres = [] }: MovieCardProps) => {
               </svg>
             </button>
           </div>
-          <span className="quick-view-hint">View Details</span>
+          <span
+            className="quick-view-hint"
+            onClick={() => onMovieClick?.(movie)}
+            role="button"
+            tabIndex={0}
+          >
+            View Details
+          </span>
         </div>
       </div>
       <div className="movie-card-info">
