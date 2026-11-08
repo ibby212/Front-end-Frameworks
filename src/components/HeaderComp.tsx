@@ -8,7 +8,7 @@ type HeaderProps = {
 };
 
 const HeaderComponent = ({ searchQuery, onChange }: HeaderProps) => {
-  const { theme, toggleTheme } = useAppContext();
+  const { theme, toggleTheme, favorites } = useAppContext();
 
   return (
     <header className="site-header">
@@ -33,7 +33,7 @@ const HeaderComponent = ({ searchQuery, onChange }: HeaderProps) => {
         <div className="header-actions">
           <button className="btn-icon-label">
             <span>Watchlist</span>
-            <span className="count-badge">0</span>
+            <span className="count-badge">{favorites.length}</span>
           </button>
           <button
             className="theme-toggle-btn"

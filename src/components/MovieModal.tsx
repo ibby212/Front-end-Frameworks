@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import type { Genre, Movie } from "../types";
 import { getBackdropUrl, getPosterUrl } from "../data/sampleMovies";
 import { getGenreNames } from "../data/genres";
+import { useAppContext } from "../context/AppContext";
 
 type MovieModalProps = {
   movie: Movie;
@@ -10,6 +11,9 @@ type MovieModalProps = {
 };
 
 const MovieModal = ({ movie, genres = [], onClose }: MovieModalProps) => {
+  const { toggleFavorite, isFavorite } = useAppContext();
+  const isFavourite = isFavorite(movie.id);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -123,6 +127,19 @@ const MovieModal = ({ movie, genres = [], onClose }: MovieModalProps) => {
             </div>
 
             <div className="modal-footer-actions">
+              <button className="btn-primary" onClick={() => toggleFavorite(movie)}>
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill={isFavourite ? "#ffffff" : "none"}
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.78-8.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span>{isFavourite ? "In Watchlist" : "Add to Watchlist"}</span>
+              </button>
               <a
                 href={trailerUrl}
                 target="_blank"

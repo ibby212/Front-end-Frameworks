@@ -1,7 +1,7 @@
-import { useState } from "react";
 import type { Genre, Movie } from "../types";
 import { getPosterUrl } from "../data/sampleMovies";
 import { getGenreNames } from "../data/genres";
+import { useAppContext } from "../context/AppContext";
 
 type MovieCardProps = {
   movie: Movie;
@@ -10,7 +10,8 @@ type MovieCardProps = {
 };
 
 const MovieCard = ({ movie, genres = [], onMovieClick }: MovieCardProps) => {
-  const [isFavourite, setIsFavourite] = useState(false);
+  const { toggleFavorite, isFavorite } = useAppContext();
+  const isFavourite = isFavorite(movie.id);
 
   const year = movie.release_date ? movie.release_date.substring(0, 4) : "TBA";
   const rating = movie.vote_average ? movie.vote_average.toFixed(1) : "N/A";
@@ -48,7 +49,7 @@ const MovieCard = ({ movie, genres = [], onMovieClick }: MovieCardProps) => {
               aria-label={
                 isFavourite ? "Remove from Favourites" : "Add to Favourites"
               }
-              onClick={() => setIsFavourite(!isFavourite)}
+              onClick={() => toggleFavorite(movie)}
             >
               <svg
                 width="16"
